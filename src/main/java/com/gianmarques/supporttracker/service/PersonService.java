@@ -58,7 +58,6 @@ public class PersonService {
         person.setPassword(passwordEncoder.encode(newPassword));
         return person;
 
-
     }
 
     public Person getPersonByEmail(String username) {

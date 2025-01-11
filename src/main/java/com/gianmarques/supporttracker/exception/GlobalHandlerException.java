@@ -2,13 +2,13 @@ package com.gianmarques.supporttracker.exception;
 
 
 import com.gianmarques.supporttracker.exception.exceptions.EmailUniqueException;
+import com.gianmarques.supporttracker.exception.exceptions.PasswordConflictException;
 import com.gianmarques.supporttracker.exception.exceptions.PasswordInvalidException;
 import com.gianmarques.supporttracker.exception.exceptions.TicketAlreadyClosedException;
 import com.gianmarques.supporttracker.exception.model.ErrorMessage;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -31,6 +31,12 @@ public class GlobalHandlerException {
     }
 
 
+    @ExceptionHandler(PasswordConflictException.class)
+    public ResponseEntity<ErrorMessage> handlePasswordConflictInvalidException(RuntimeException exception, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorMessage(request, HttpStatus.CONFLICT, exception.getMessage()));
+    }
+
+
     @ExceptionHandler(PasswordInvalidException.class)
     public ResponseEntity<ErrorMessage> handlePasswordInvalidException(RuntimeException exception, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, exception.getMessage()));
@@ -39,7 +45,7 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest request, BindingResult result) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Some fields are incorrects", result));
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Some fields are incorrect", result));
     }
 
     @ExceptionHandler(TicketAlreadyClosedException.class)

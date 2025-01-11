@@ -37,8 +37,9 @@ public class AuthIT {
 
     // Auth - With Bad Credentials
     @Test
-    public void auth_WithBadCredentials_ReturnTokenWithStatus200() {
+    public void auth_WithBadCredentials_ReturnTokenWithStatus400() {
 
+        // Incorrect Email
         ErrorMessage responseBody = webTestClient.post()
                 .uri("api/v1/auth")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -50,6 +51,7 @@ public class AuthIT {
 
         Assertions.assertThat(responseBody.getStatus()).isEqualTo(400);
 
+        // Incorrect Password
         ErrorMessage responseBody2 = webTestClient.post()
                 .uri("api/v1/auth")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -61,6 +63,22 @@ public class AuthIT {
 
         Assertions.assertThat(responseBody2.getStatus()).isEqualTo(400);
 
+    }
+
+
+    @Test
+    public void auth_WithEmptyCredentials_ReturnTokenWithStatus422(){
+
+        ErrorMessage responseBody = webTestClient.post()
+                .uri("api/v1/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new PersonLoginDto("user01@test.com", null))
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
     }
 
 }

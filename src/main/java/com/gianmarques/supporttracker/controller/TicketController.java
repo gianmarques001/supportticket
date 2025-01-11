@@ -2,12 +2,18 @@ package com.gianmarques.supporttracker.controller;
 
 
 import com.gianmarques.supporttracker.entity.Ticket;
+import com.gianmarques.supporttracker.exception.model.ErrorMessage;
 import com.gianmarques.supporttracker.mapper.TicketMapper;
 import com.gianmarques.supporttracker.mapper.dto.ticket.TicketListResponseDto;
 import com.gianmarques.supporttracker.mapper.dto.ticket.TicketRequestDto;
 import com.gianmarques.supporttracker.mapper.dto.ticket.TicketResponseDto;
 import com.gianmarques.supporttracker.security.jwt.JwtUserDetails;
 import com.gianmarques.supporttracker.service.TicketService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +33,20 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
+
+    @Operation(summary = "Get all persons", description = "Resource to get all tickets that have OPEN status.",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Return tickets",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = TicketListResponseDto.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @PreAuthorize("hasRole('ADMIN') OR hasRole('SUPPORT')")
     @GetMapping
     public ResponseEntity<List<TicketListResponseDto>> getAllTickets() {
@@ -36,6 +56,22 @@ public class TicketController {
     }
 
 
+    @Operation(summary = "Get ticket by ID", description = "Resource to get ticket by ID.",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Return ticket",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = TicketListResponseDto.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Ticket not found",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @PreAuthorize("hasRole('SUPPORT')")
     @GetMapping("/{id}")
     public ResponseEntity<TicketResponseDto> getTicket(@PathVariable Long id) {
@@ -44,6 +80,21 @@ public class TicketController {
     }
 
 
+
+    @Operation(summary = "Send ticket", description = "Client send ticket.",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Send ticket",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = TicketResponseDto.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+
+            })
     @PreAuthorize("hasRole('CLIENT')")
     @PostMapping
     public ResponseEntity<TicketResponseDto> sendTicket(@AuthenticationPrincipal JwtUserDetails userDetails, @Valid @RequestBody TicketRequestDto ticketRequestDto) {
@@ -52,6 +103,20 @@ public class TicketController {
     }
 
 
+    @Operation(summary = "Update ticket by ID", description = "Resource to update ticket by ID.",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Update ticket"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Ticket not found",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @PreAuthorize("hasRole('SUPPORT')")
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateTicket(@PathVariable Long id, @AuthenticationPrincipal JwtUserDetails userDetails) {

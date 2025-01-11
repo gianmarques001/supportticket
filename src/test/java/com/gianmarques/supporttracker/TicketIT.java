@@ -24,7 +24,6 @@ public class TicketIT {
     @Autowired
     WebTestClient webTestClient;
 
-
     // Get All Tickets - With Role Admin/Support
     @Test
     public void listAllTickets_WithRoleAdminAndSupport_ReturnStatus200() {
@@ -51,6 +50,21 @@ public class TicketIT {
 
         Assertions.assertThat(responseBody2.size()).isEqualTo(1);
 
+    }
+
+    // Get All Tickets - Without Authenticated
+    @Test
+    public void listAllTickets_WithoutAuthenticated_ReturnStatus401() {
+        ErrorMessage responseBody = webTestClient
+                .get()
+                .uri("api/v1/tickets")
+
+                .exchange()
+                .expectStatus().isEqualTo(401)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertThat(responseBody).isNull();
     }
 
     // Get All Tickets - With Role Client
@@ -98,6 +112,21 @@ public class TicketIT {
 
     }
 
+    // Get Ticket - WithoutAuthenticated
+    @Test
+    public void getTicketById_WithoutAuthenticated_ReturnStatus401() {
+        ErrorMessage responseBody = webTestClient
+                .get()
+                .uri("api/v1/tickets/110")
+
+                .exchange()
+                .expectStatus().isEqualTo(401)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertThat(responseBody).isNull();
+    }
+
     // Get Ticket - With Role Client
     @Test
     public void getTicketById_WithRoleClient_ReturnStatus403() {
@@ -112,6 +141,60 @@ public class TicketIT {
                 .returnResult().getResponseBody();
 
         Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
+    }
+
+    // Get Ticket - Passing Invalid ID
+    @Test
+    public void getTicketById_PassingInvalidId_ReturnStatus404() {
+
+        ErrorMessage responseBody = webTestClient
+                .get()
+                .uri("api/v1/tickets/111")
+                .headers(JwtAuthentication.getHeadersAuthorization(webTestClient, "bruce@test.com", "12345678"))
+                .exchange()
+                .expectStatus().isEqualTo(404)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertThat(responseBody.getStatus()).isEqualTo(404);
+    }
+
+
+    // Send Ticket - With Role Client
+    @Test
+    public void sendTicket_WithRoleClient_ReturnStatus201() {
+
+        TicketResponseDto responseBody = webTestClient
+                .post()
+                .uri("api/v1/tickets")
+                .headers(JwtAuthentication.getHeadersAuthorization(webTestClient, "tony@test.com", "12345678"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new TicketRequestDto("Error on Screen", "Error on my notebook screen"))
+                .exchange()
+                .expectStatus().isEqualTo(201)
+                .expectBody(TicketResponseDto.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertThat(responseBody.getStatus()).isEqualTo(Ticket.Status.OPEN.toString());
+        Assertions.assertThat(responseBody).isNotNull();
+    }
+
+
+    // Send Ticket - Without Authenticated
+    @Test
+    public void sendTicket_WithoutAuthenticated_ReturnStatus401() {
+
+        ErrorMessage responseBody = webTestClient
+                .post()
+                .uri("api/v1/tickets")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new TicketRequestDto("Error on Screen", "Error on my notebook screen"))
+                .exchange()
+                .expectStatus().isEqualTo(401)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertThat(responseBody).isNull();
     }
 
     // Send Ticket - With Role Admin/Support
@@ -148,25 +231,6 @@ public class TicketIT {
 
     }
 
-    // Send Ticket - With Role Client
-    @Test
-    public void sendTicket_WithRoleClient_ReturnStatus201() {
-
-        TicketResponseDto responseBody = webTestClient
-                .post()
-                .uri("api/v1/tickets")
-                .headers(JwtAuthentication.getHeadersAuthorization(webTestClient, "tony@test.com", "12345678"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new TicketRequestDto("Error on Screen", "Error on my notebook screen"))
-                .exchange()
-                .expectStatus().isCreated()
-                .expectBody(TicketResponseDto.class)
-                .returnResult().getResponseBody();
-
-        Assertions.assertThat(responseBody).isNotNull();
-        Assertions.assertThat(responseBody.getStatus()).isEqualTo(Ticket.Status.OPEN.toString());
-
-    }
 
     // Update Ticket - With Role Support
     @Test
@@ -181,6 +245,21 @@ public class TicketIT {
 
     }
 
+    // Update Ticket - Without Authenticated
+    @Test
+    public void updateTicketById_WithoutAuthenticated_ReturnStatus401() {
+
+        ErrorMessage responseBody = webTestClient
+                .patch()
+                .uri("api/v1/tickets/110")
+                .exchange()
+                .expectStatus().isEqualTo(401)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertThat(responseBody).isNull();
+
+    }
 
     // Update Ticket - With Role Admin/Client
     @Test
@@ -211,9 +290,9 @@ public class TicketIT {
         Assertions.assertThat(responseBody2.getStatus()).isEqualTo(403);
     }
 
-    // Update Ticket - With Wrong ID
+    // Update Ticket - With Invalid ID
     @Test
-    public void updateTicketByInvalidId_WithRoleSupport_ReturnStatus404() {
+    public void updateTicketById_PassingInvalidId_ReturnStatus404() {
 
         ErrorMessage responseBody = webTestClient
                 .patch()

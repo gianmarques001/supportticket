@@ -42,36 +42,20 @@ public class SupportIT {
 
     }
 
-    // Save Support - With Role Admin with Bad Credentials
+    // Save Support - Without Authenticated
     @Test
     public void saveSupport_PassingIncorrectData_ReturnStatus401() {
 
-        // Invalid Credentials
         ErrorMessage responseBody = webTestClient
                 .post()
                 .uri("api/v1/support")
-                .headers(JwtAuthentication.getHeadersAuthorization(webTestClient, "user01@admin.com", "123456999", 400))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new PersonRequestDto("Charles Xavier", "charles@test.com", "12345678"))
                 .exchange()
                 .expectStatus().isEqualTo(401)
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
-
         Assertions.assertThat(responseBody).isNull();
-
-
-        // Without Credentials
-        ErrorMessage responseBody2 = webTestClient
-                .post()
-                .uri("api/v1/support")
-                .bodyValue(new PersonRequestDto("Charles Xavier", "charles@test.com", "12345678"))
-                .exchange()
-                .expectStatus().isEqualTo(401)
-                .expectBody(ErrorMessage.class)
-                .returnResult().getResponseBody();
-
-        Assertions.assertThat(responseBody2).isNull();
 
 
     }
@@ -112,14 +96,30 @@ public class SupportIT {
 
         Assertions.assertThat(responseBody).isNotNull();
         Assertions.assertThat(responseBody.getStatus()).isEqualTo(409);
+    }
 
+    // Save Support - Invalid Fields
+    @Test
+    public void saveSupport_InvalidFields_ReturnStatus422() {
+        ErrorMessage responseBody = webTestClient
+                .post()
+                .uri("api/v1/support")
+                .headers(JwtAuthentication.getHeadersAuthorization(webTestClient, "user01@admin.com", "12345678"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new PersonRequestDto("Charles Xavier ", "charles@test.com", null))
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
 
+        Assertions.assertThat(responseBody).isNotNull();
+        Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
     }
 
 
     // Get All Tickets - With Role Support with Right Credentials
     @Test
-    public void listTickets_PassingCorrectData_ReturnStatus200() {
+    public void listTickets_WithRightCredentials_ReturnStatus200() {
         List<SupportListResponseDto> responseBody = webTestClient
                 .get()
                 .uri("api/v1/support")
@@ -132,25 +132,25 @@ public class SupportIT {
         Assertions.assertThat(responseBody.size()).isEqualTo(1);
     }
 
-    // Get All Tickets - With Role Support with Bad Credentials
+    // Get All Ticket - Without Authenticated
     @Test
-    public void listTickets_PassingIncorrectData_ReturnStatus400() {
+    public void listTickets_WithoutAuthenticated_ReturnStatus401() {
         ErrorMessage responseBody = webTestClient
                 .get()
                 .uri("api/v1/support")
-                .headers(JwtAuthentication.getHeadersAuthorization(webTestClient, "bruce@test.com", "12345679", 400))
+
                 .exchange()
                 .expectStatus().isEqualTo(401)
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
 
         Assertions.assertThat(responseBody).isNull();
-    }
 
+    }
 
     // Get All Tickets - With Role Client
     @Test
-    public void listTickets_WithRoleClient_ReturnStatus401() {
+    public void listTickets_WithRoleClient_ReturnStatus403() {
         ErrorMessage responseBody = webTestClient
                 .get()
                 .uri("api/v1/support")

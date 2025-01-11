@@ -23,7 +23,7 @@ public class PersonIT {
 
     // Get Persons - With Role Admin
     @Test
-    public void listPersons_WithRoleAdminUsingRightCredentials_ReturnStatus200() {
+    public void listPersons_WithRightCredentials_ReturnStatus200() {
 
         List<PersonResponseDto> responseBody = webTestClient
                 .get()
@@ -38,14 +38,15 @@ public class PersonIT {
         Assertions.assertThat(responseBody.size()).isEqualTo(5);
     }
 
-    // Get Persons - With Role Admin with Bad Credentials
+
+
+    // Get Persons - Without Authenticated
     @Test
-    public void listPersons_WithRoleAdminUsingBadCredentials_ReturnErrorMessageStatus401() {
+    public void listPersons_WithoutAuthenticated_ReturnStatus401() {
 
         ErrorMessage responseBody = webTestClient
                 .get()
                 .uri("api/v1/persons")
-                .headers(JwtAuthentication.getHeadersAuthorization(webTestClient, "user01@admin.com", "12345679", 400))
                 .exchange()
                 .expectStatus().isEqualTo(401)
                 .expectBody(ErrorMessage.class)
@@ -54,9 +55,9 @@ public class PersonIT {
         Assertions.assertThat(responseBody).isNull();
     }
 
-    // Get Persons - With Role Support
+    // Get Persons - With Role Client/Support
     @Test
-    public void listPersons_WithRoleSupport_ReturnErrorMessageStatus403() {
+    public void listPersons_WithRoleClientAndSupport_ReturnStatus403() {
 
         ErrorMessage responseBody = webTestClient
                 .get()
@@ -68,13 +69,8 @@ public class PersonIT {
                 .returnResult().getResponseBody();
 
         Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
-    }
 
-    // Get Persons - With Role Client
-    @Test
-    public void listPersons_WithRoleClient_ReturnErrorMessageStatus403() {
-
-        ErrorMessage responseBody = webTestClient
+        ErrorMessage responseBody2 = webTestClient
                 .get()
                 .uri("api/v1/persons")
                 .headers(JwtAuthentication.getHeadersAuthorization(webTestClient, "tony@test.com", "12345678"))
@@ -83,8 +79,9 @@ public class PersonIT {
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
 
-        Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
+        Assertions.assertThat(responseBody2.getStatus()).isEqualTo(403);
     }
+
 
     // Get Person - With Role Admin - Passing Valid Id
     @Test
@@ -103,22 +100,23 @@ public class PersonIT {
         Assertions.assertThat(responseBody.getEmail()).isEqualTo("tony@test.com");
     }
 
-    // Get Person - With Role Admin - Passing Invalid Id
+
+    // Get Person - Without Authenticated
     @Test
-    public void getPersonById_WithRoleAdminWithInvalidId_ReturnStatus200() {
+    public void getPersonById_WithoutAuthenticated_ReturnStatus401() {
 
         ErrorMessage responseBody = webTestClient
                 .get()
-                .uri("api/v1/persons/500")
-                .headers(JwtAuthentication.getHeadersAuthorization(webTestClient, "user01@admin.com", "12345678"))
+                .uri("api/v1/persons/200")
                 .exchange()
-                .expectStatus().isNotFound()
+                .expectStatus().isEqualTo(401)
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
 
-        Assertions.assertThat(responseBody).isNotNull();
+        Assertions.assertThat(responseBody).isNull();
 
     }
+
 
     // Get Person - With Role Support/Client
     @Test
@@ -145,6 +143,25 @@ public class PersonIT {
                 .returnResult().getResponseBody();
 
         Assertions.assertThat(responseBody2.getStatus()).isEqualTo(403);
+
+    }
+
+
+    // Get Person - Passing Invalid Id
+    @Test
+    public void getPersonById_PassingInvalidId__ReturnStatus404() {
+
+        ErrorMessage responseBody = webTestClient
+                .get()
+                .uri("api/v1/persons/500")
+                .headers(JwtAuthentication.getHeadersAuthorization(webTestClient, "user01@admin.com", "12345678"))
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertThat(responseBody).isNotNull();
+        Assertions.assertThat(responseBody.getStatus()).isEqualTo(404);
 
     }
 
