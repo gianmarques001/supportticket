@@ -40,8 +40,9 @@ public class SupportController {
     @PreAuthorize("hasRole('SUPPORT')")
     @GetMapping
     public ResponseEntity<List<SupportListResponseDto>> getAllTicketsBySupport(@AuthenticationPrincipal JwtUserDetails userDetails) {
-        List<Support> ticketsBySupport = supportService.getAllTickets(userDetails.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(SupportMapper.toList(ticketsBySupport));
+        List<?> ticketsBySupport = supportService.getAllTickets(userDetails.getId());
+
+        return ResponseEntity.status(HttpStatus.OK).body(SupportMapper.toList((List<Support>) ticketsBySupport));
 
     }
 }

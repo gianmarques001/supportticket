@@ -23,14 +23,6 @@ public class SupportMapper {
         return supports.stream().map(support -> toListDto(support)).toList();
     }
 
-
-    //private String title;
-    //
-    //    private String description;
-    //
-    //    private String clientName;
-    //
-    //    private String status;
     private static SupportListResponseDto toListDto(Support support) {
         SupportListResponseDto supportListResponseDto = new SupportListResponseDto();
 

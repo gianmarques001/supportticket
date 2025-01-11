@@ -11,6 +11,8 @@ import java.util.List;
 @Table(name = "tb_clients")
 public class Client extends Person {
 
+
+
     @OneToMany(mappedBy = "client")
     private List<Ticket> tickets;
 
