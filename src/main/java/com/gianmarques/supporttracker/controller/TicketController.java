@@ -4,6 +4,7 @@ package com.gianmarques.supporttracker.controller;
 import com.gianmarques.supporttracker.entity.Ticket;
 import com.gianmarques.supporttracker.exception.model.ErrorMessage;
 import com.gianmarques.supporttracker.mapper.TicketMapper;
+import com.gianmarques.supporttracker.mapper.dto.ticket.TicketClientResponseDto;
 import com.gianmarques.supporttracker.mapper.dto.ticket.TicketListResponseDto;
 import com.gianmarques.supporttracker.mapper.dto.ticket.TicketRequestDto;
 import com.gianmarques.supporttracker.mapper.dto.ticket.TicketResponseDto;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/tickets")
+@Tag(name = "Tickets", description = "Resource to manage tickets")
 public class TicketController {
 
     private final TicketService ticketService;
@@ -33,8 +36,7 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
-
-    @Operation(summary = "Get all persons", description = "Resource to get all tickets that have OPEN status.",
+    @Operation(summary = "Get all tickets", description = "Resource to get all tickets that have OPEN status.",
             security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Return tickets",
@@ -80,6 +82,28 @@ public class TicketController {
     }
 
 
+    @Operation(summary = "Client get ticket all  your tickets.", description = "Resource to client get all your tickets.",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Return tickets",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = TicketListResponseDto.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+            })
+    @PreAuthorize("hasRole('CLIENT')")
+    @GetMapping("/client")
+    public ResponseEntity<List<TicketClientResponseDto>> getTicketsClient(@AuthenticationPrincipal JwtUserDetails jwtUserDetails) {
+        Long id = jwtUserDetails.getId();
+        List<Ticket> tickets = ticketService.getTicketsClient(id);
+        return ResponseEntity.status(HttpStatus.OK).body(TicketMapper.toListClient(tickets));
+
+    }
+
 
     @Operation(summary = "Send ticket", description = "Client send ticket.",
             security = @SecurityRequirement(name = "security"),
@@ -123,8 +147,6 @@ public class TicketController {
         ticketService.updateTicket(id, userDetails.getId());
         return ResponseEntity.ok().build();
     }
-
-
 
 
 }

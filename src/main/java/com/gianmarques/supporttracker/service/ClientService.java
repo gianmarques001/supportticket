@@ -47,7 +47,7 @@ public class ClientService {
         }
         Client client = getClientById(id);
         if (!passwordEncoder.matches(oldPassword, client.getPassword())) {
-            throw new PasswordConflictException("The password incorrect.");
+            throw new PasswordConflictException("The password is incorrect.");
         }
         client.setPassword(passwordEncoder.encode(newPassword));
 

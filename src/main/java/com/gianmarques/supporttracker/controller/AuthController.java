@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Authentication", description = "Resource to authenticate")
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("/api/v1")
 public class AuthController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
@@ -41,7 +41,7 @@ public class AuthController {
 
     @Operation(summary = "Authenticate a user", description = "Resource to authenticate a user in system.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successful authentication and return of a token.",
+                    @ApiResponse(responseCode = "200", description = "Successful authentication and return token.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = JwtToken.class))),
                     @ApiResponse(responseCode = "400", description = "Bad credentials",
@@ -52,7 +52,6 @@ public class AuthController {
                                     schema = @Schema(implementation = ErrorMessage.class))),
             })
 
-
     @PostMapping("/auth")
     public ResponseEntity<?> auth(@Valid @RequestBody PersonLoginDto personLoginDto, HttpServletRequest request) {
         try {
@@ -61,9 +60,10 @@ public class AuthController {
             JwtToken token = userDetailsService.getAuthenticatedToken(personLoginDto.getEmail());
             return ResponseEntity.ok(token);
         } catch (AuthenticationException e) {
-            log.warn("Error authenticate", e.getMessage());
+            log.warn("Error", e.getMessage());
         }
         return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Bad credentials"));
 
     }
+
 }

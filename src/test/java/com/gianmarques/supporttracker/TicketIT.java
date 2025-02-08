@@ -49,7 +49,6 @@ public class TicketIT {
                 .returnResult().getResponseBody();
 
         Assertions.assertThat(responseBody2.size()).isEqualTo(1);
-
     }
 
     // Get All Tickets - Without Authenticated
@@ -108,11 +107,9 @@ public class TicketIT {
                 .returnResult().getResponseBody();
 
         Assertions.assertThat(responseBody2.size()).isEqualTo(1);
-
-
     }
 
-    // Get Ticket - WithoutAuthenticated
+    // Get Ticket - Without Authenticated
     @Test
     public void getTicketById_WithoutAuthenticated_ReturnStatus401() {
         ErrorMessage responseBody = webTestClient

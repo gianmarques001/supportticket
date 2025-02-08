@@ -1,9 +1,10 @@
 package com.gianmarques.supporttracker.mapper;
 
+import com.gianmarques.supporttracker.entity.Ticket;
+import com.gianmarques.supporttracker.mapper.dto.ticket.TicketClientResponseDto;
 import com.gianmarques.supporttracker.mapper.dto.ticket.TicketListResponseDto;
 import com.gianmarques.supporttracker.mapper.dto.ticket.TicketRequestDto;
 import com.gianmarques.supporttracker.mapper.dto.ticket.TicketResponseDto;
-import com.gianmarques.supporttracker.entity.Ticket;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
@@ -28,4 +29,13 @@ public class TicketMapper {
     }
 
 
+    private static TicketClientResponseDto toTicketClientDto(Ticket ticket) {
+        return new ModelMapper().map(ticket, TicketClientResponseDto.class);
+
+    }
+
+
+    public static List<TicketClientResponseDto> toListClient(List<Ticket> tickets) {
+        return tickets.stream().map(ticket -> toTicketClientDto(ticket)).toList();
+    }
 }

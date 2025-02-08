@@ -9,6 +9,7 @@ import com.gianmarques.supporttracker.mapper.dto.person.PersonResponseDto;
 import com.gianmarques.supporttracker.mapper.dto.support.SupportListResponseDto;
 import com.gianmarques.supporttracker.security.jwt.JwtUserDetails;
 import com.gianmarques.supporttracker.service.SupportService;
+import com.gianmarques.supporttracker.service.TicketService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,11 +30,12 @@ import java.util.List;
 @RequestMapping("/api/v1/support")
 public class SupportController {
 
-
     private final SupportService supportService;
+    private final TicketService ticketService;
 
-    public SupportController(SupportService supportService) {
+    public SupportController(SupportService supportService, TicketService ticketService) {
         this.supportService = supportService;
+        this.ticketService = ticketService;
     }
 
     @Operation(summary = "Save support", description = "Resource to save support in the system. (Only admins can save).",
@@ -80,7 +82,7 @@ public class SupportController {
     @PreAuthorize("hasRole('SUPPORT')")
     @GetMapping
     public ResponseEntity<List<SupportListResponseDto>> getAllTicketsBySupport(@AuthenticationPrincipal JwtUserDetails userDetails) {
-        List<?> ticketsBySupport = supportService.getAllTickets(userDetails.getId());
+        List<?> ticketsBySupport = ticketService.getAllTicketsBySupport(userDetails.getId());
         return ResponseEntity.status(HttpStatus.OK).body(SupportMapper.toList((List<Support>) ticketsBySupport));
 
     }

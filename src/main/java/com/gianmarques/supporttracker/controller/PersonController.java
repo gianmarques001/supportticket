@@ -15,10 +15,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
 
 @Tag(name = "Persons", description = "Resources to list all persons or by id and delete a person")
 @RestController
@@ -75,7 +77,5 @@ public class PersonController {
         Person person = personService.getPersonById(id);
         return ResponseEntity.status(HttpStatus.OK).body(PersonMapper.toDto(person));
     }
-
-
 
 }

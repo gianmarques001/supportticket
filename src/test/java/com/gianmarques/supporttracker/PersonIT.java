@@ -39,7 +39,6 @@ public class PersonIT {
     }
 
 
-
     // Get Persons - Without Authenticated
     @Test
     public void listPersons_WithoutAuthenticated_ReturnStatus401() {
@@ -83,7 +82,7 @@ public class PersonIT {
     }
 
 
-    // Get Person - With Role Admin - Passing Valid Id
+    // Get Person - With Role Admin
     @Test
     public void getPersonById_WithRoleAdminValidId_ReturnStatus200() {
 
@@ -143,7 +142,6 @@ public class PersonIT {
                 .returnResult().getResponseBody();
 
         Assertions.assertThat(responseBody2.getStatus()).isEqualTo(403);
-
     }
 
 
@@ -162,8 +160,5 @@ public class PersonIT {
 
         Assertions.assertThat(responseBody).isNotNull();
         Assertions.assertThat(responseBody.getStatus()).isEqualTo(404);
-
     }
-
-
 }

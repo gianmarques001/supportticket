@@ -57,9 +57,6 @@ public class TicketService {
 
     public void updateTicket(Long idTicket, Long idSupport) {
 
-        // Atualizar o status do ticket -ok
-        // Adicionar o ticket na fila do Support
-        // Atualizar o modified by - feito automaticamente
 
         Ticket ticket = getTicketById(idTicket);
         Support support = supportService.getSupportById(idSupport);
@@ -75,18 +72,29 @@ public class TicketService {
         }
         if (ticket.getStatus().equals(Ticket.Status.IN_PROGRESS)) {
             ticket.setStatus(Ticket.Status.CLOSED);
-            return;
-//            ticket.setSupport(support);
-//            TicketAllocation ticketAllocation = new TicketAllocation();
-//            ticketAllocation.setTicket(ticket);
-//            ticketAllocation.setClient(ticket.getClient());
-//            ticketAllocation.setSupport(support);
-//            ticketAllocationRepository.save(ticketAllocation);
+
         } else {
             throw new TicketAlreadyClosedException("Ticket is closed");
         }
-
-
     }
 
+
+    public List<?> getAllTicketsBySupport(Long id) {
+        Support support = supportService.getSupportById(id);
+        List<TicketAllocation> tickets = ticketAllocationRepository.findAllBySupport(support);
+        if (tickets.isEmpty()) {
+            throw new EntityNotFoundException("Tickets are empty");
+        }
+        return supportRepository.findAllByIdEquals(id);
+    }
+
+
+    public List<Ticket> getTicketsClient(Long id) {
+
+        Client client = clientService.getClientById(id);
+        List<TicketAllocation> ticketsAllocation = ticketAllocationRepository.findAllByClient(client);
+        List<Ticket> tickets = new ArrayList<>();
+        ticketsAllocation.forEach(ticketAllocation -> tickets.add(ticketAllocation.getTicket()));
+        return tickets;
+    }
 }

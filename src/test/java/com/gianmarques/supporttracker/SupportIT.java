@@ -39,7 +39,6 @@ public class SupportIT {
 
         Assertions.assertThat(responseBody).isNotNull();
         Assertions.assertThat(responseBody.getEmail()).isEqualTo("charles@test.com");
-
     }
 
     // Save Support - Without Authenticated
@@ -56,8 +55,6 @@ public class SupportIT {
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
         Assertions.assertThat(responseBody).isNull();
-
-
     }
 
     // Save Support - With Role Client
@@ -76,8 +73,6 @@ public class SupportIT {
 
         Assertions.assertThat(responseBody).isNotNull();
         Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
-
-
     }
 
     // Save Support - Duplicate E-mail
@@ -117,7 +112,7 @@ public class SupportIT {
     }
 
 
-    // Get All Tickets - With Role Support with Right Credentials
+    // Get All Tickets - With Role Support
     @Test
     public void listTickets_WithRightCredentials_ReturnStatus200() {
         List<SupportListResponseDto> responseBody = webTestClient
@@ -145,7 +140,6 @@ public class SupportIT {
                 .returnResult().getResponseBody();
 
         Assertions.assertThat(responseBody).isNull();
-
     }
 
     // Get All Tickets - With Role Client
@@ -163,6 +157,4 @@ public class SupportIT {
         Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
 
     }
-
-
 }

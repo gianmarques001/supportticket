@@ -20,10 +20,5 @@ public class Support extends Person {
         return tickets;
     }
 
-    @Override
-    public String toString() {
-        return "Support{" +
-                "tickets=" + tickets +
-                '}';
-    }
+
 }

@@ -11,9 +11,6 @@ import java.util.List;
 public class PersonMapper {
 
 
-    public static Person toPerson(PersonRequestDto personRequestDto) {
-        return new ModelMapper().map(personRequestDto, Person.class);
-    }
 
     public static PersonResponseDto toDto(Person person) {
         return new ModelMapper().map(person, PersonResponseDto.class);

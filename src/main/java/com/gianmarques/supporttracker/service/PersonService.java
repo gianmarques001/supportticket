@@ -4,7 +4,6 @@ package com.gianmarques.supporttracker.service;
 import com.gianmarques.supporttracker.entity.Person;
 import com.gianmarques.supporttracker.exception.exceptions.PasswordInvalidException;
 import com.gianmarques.supporttracker.repository.PersonRepository;
-import com.gianmarques.supporttracker.repository.SupportRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,15 +18,13 @@ public class PersonService {
 
     private final PersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SupportRepository supportRepository;
-    private final SupportService supportService;
 
 
-    public PersonService(PersonRepository userRepository, PasswordEncoder passwordEncoder, SupportRepository supportRepository, SupportService supportService) {
+    public PersonService(PersonRepository userRepository, PasswordEncoder passwordEncoder) {
         this.personRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.supportRepository = supportRepository;
-        this.supportService = supportService;
+
+
     }
 
     public List<Person> getAllPersons() {

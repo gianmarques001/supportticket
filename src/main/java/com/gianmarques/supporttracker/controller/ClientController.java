@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -30,9 +31,7 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-
     @Operation(summary = "Save client", description = "Resource to save client in the system.",
-            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "201", description = "Create client",
                             content = @Content(mediaType = "application/json",
@@ -55,7 +54,7 @@ public class ClientController {
             security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Update client"),
-                    @ApiResponse(responseCode = "400", description = "The fields in the new password are not the same.",
+                    @ApiResponse(responseCode = "400", description = "The field in the new password are not the same.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "404", description = "Client not found.",
@@ -68,6 +67,7 @@ public class ClientController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
             })
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateClient(@PathVariable Long id, @Valid @RequestBody ClientUpdateDto clientUpdateDto) {
         clientService.updateClientById(id, clientUpdateDto.getOldPassword(), clientUpdateDto.getNewPassword(), clientUpdateDto.getConfirmPassword());

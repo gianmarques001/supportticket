@@ -77,7 +77,6 @@ public class ClientIT {
     // Save Client - Duplicate E-mail
     @Test
     public void saveClient_DuplicateEmail_ReturnStatus409() {
-
         ErrorMessage responseBody = webTestClient
                 .post()
                 .uri("api/v1/clients")
@@ -143,10 +142,7 @@ public class ClientIT {
 
         Assertions.assertThat(responseBody).isNotNull();
         Assertions.assertThat(responseBody.getStatus()).isEqualTo(404);
-
-
     }
-
 
 
     // Update Client - Passing Incorrect Password
@@ -166,14 +162,11 @@ public class ClientIT {
 
         Assertions.assertThat(responseBody).isNotNull();
         Assertions.assertThat(responseBody.getStatus()).isEqualTo(409);
-
-
     }
 
     // Update Client - Passing Invalid Field
     @Test
     public void updateClientById_PassingInvalidField_ReturnStatus422() {
-
 
         ErrorMessage responseBody = webTestClient
                 .patch()
@@ -188,11 +181,7 @@ public class ClientIT {
 
         Assertions.assertThat(responseBody).isNotNull();
         Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
-
-
-
     }
-
 
 
 }
