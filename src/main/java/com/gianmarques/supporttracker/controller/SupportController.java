@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Support", description = "Resources to save a support and get all tickets in the system.")
+@Tag(name = "Suporte", description = "Recursos para salvar um suporte e listar todos os tickets enviados no sistema.")
 @RestController
 @RequestMapping("/api/v1/support")
 public class SupportController {
@@ -38,22 +38,22 @@ public class SupportController {
         this.ticketService = ticketService;
     }
 
-    @Operation(summary = "Save support", description = "Resource to save support in the system. (Only admins can save).",
+    @Operation(summary = "Salvar suporte.", description = "Recurso para salvar suporte no sistema. (Apenas role de admin pode acessar).",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Create support",
+                    @ApiResponse(responseCode = "201", description = " support",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = PersonResponseDto.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                    @ApiResponse(responseCode = "401", description = "Acesso não autorizado.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                    @ApiResponse(responseCode = "403", description = "Acesso proibido.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "409", description = "Conflict data",
+                    @ApiResponse(responseCode = "409", description = "Conflito de dados.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "422", description = "Invalid field error",
+                    @ApiResponse(responseCode = "422", description = "Campos inválidos.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
             })
@@ -66,16 +66,16 @@ public class SupportController {
     }
 
 
-    @Operation(summary = "Get all tickets by Support", description = "Resource to get all tickets the support accepted.",
+    @Operation(summary = "Listar todos os tickets.", description = "Recurso para listar todos os tickets aceitos pelo suporte. (Apenas role de support pode acessar)",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Return tickets",
+                    @ApiResponse(responseCode = "200", description = "Retorna todos os tickets.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = SupportListResponseDto.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                    @ApiResponse(responseCode = "401", description = "Acesso não autorizado.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                    @ApiResponse(responseCode = "403", description = "Acesso proibido.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class)))
             })

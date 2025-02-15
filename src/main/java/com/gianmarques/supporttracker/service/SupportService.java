@@ -22,7 +22,7 @@ public class SupportService {
     }
 
     public Support getSupportById(Long id) {
-        return supportRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Support not found"));
+        return supportRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Suporte não encontrado."));
     }
 
 
@@ -32,7 +32,7 @@ public class SupportService {
             support.setRole(Person.Role.ROLE_SUPPORT);
             return supportRepository.save(support);
         } catch (DataIntegrityViolationException e) {
-            throw new EmailUniqueException("Email already registered. " + support.getEmail());
+            throw new EmailUniqueException("Email já existe. " + support.getEmail());
         }
     }
 

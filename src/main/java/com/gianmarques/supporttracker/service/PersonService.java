@@ -33,7 +33,7 @@ public class PersonService {
 
 
     public Person getPersonById(Long id) {
-        return personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Person not found"));
+        return personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Pessoa não encontrada."));
     }
 
     public void deletePersonById(Long id) {
@@ -46,11 +46,11 @@ public class PersonService {
 
     public Person updatePersonById(Long id, String oldPassword, String newPassword, String confirmPassword) {
         if (!newPassword.equals(confirmPassword)) {
-            throw new PasswordInvalidException("Passwords are different.");
+            throw new PasswordInvalidException("Campo da nova senha está diferente do confirmar.");
         }
         Person person = getPersonById(id);
         if (!passwordEncoder.matches(oldPassword, person.getPassword())) {
-            throw new PasswordInvalidException("Password is incorrect.");
+            throw new PasswordInvalidException("Campo senha está incorreto.");
         }
         person.setPassword(passwordEncoder.encode(newPassword));
         return person;
@@ -58,7 +58,7 @@ public class PersonService {
     }
 
     public Person getPersonByEmail(String username) {
-        return personRepository.findByEmail(username).orElseThrow(() -> new EntityNotFoundException("Person not found"));
+        return personRepository.findByEmail(username).orElseThrow(() -> new EntityNotFoundException("Pessoa não encontrada."));
     }
 
     public Person.Role getPersonByRole(String email) {

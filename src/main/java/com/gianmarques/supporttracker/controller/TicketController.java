@@ -27,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/tickets")
-@Tag(name = "Tickets", description = "Resource to manage tickets")
+@Tag(name = "Tickets", description = "Recursos para gerenciar tickets do sistema.")
 public class TicketController {
 
     private final TicketService ticketService;
@@ -36,16 +36,16 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
-    @Operation(summary = "Get all tickets", description = "Resource to get all tickets that have OPEN status.",
+    @Operation(summary = "Listar todos os tickets.", description = "Recurso para listar todos os tickets que estão com o status OPEN no sistema. (Roles de admin e support podem acessar)",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Return tickets",
+                    @ApiResponse(responseCode = "200", description = "Retorna os tickets.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = TicketListResponseDto.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                    @ApiResponse(responseCode = "401", description = "Acesso não autorizado.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                    @ApiResponse(responseCode = "403", description = "Acesso proibido.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class)))
             })
@@ -58,19 +58,19 @@ public class TicketController {
     }
 
 
-    @Operation(summary = "Get ticket by ID", description = "Resource to get ticket by ID.",
+    @Operation(summary = "Buscar ticket por ID.", description = "Recurso para buscar ticket pelo ID. (Apenas role de support pode acessar)",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Return ticket",
+                    @ApiResponse(responseCode = "200", description = "Retorna ticket.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = TicketListResponseDto.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                    @ApiResponse(responseCode = "401", description = "Acesso não autorizado.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                    @ApiResponse(responseCode = "403", description = "Acesso proibido.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "404", description = "Ticket not found",
+                    @ApiResponse(responseCode = "404", description = "Ticket não encontrado.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class)))
             })
@@ -82,16 +82,16 @@ public class TicketController {
     }
 
 
-    @Operation(summary = "Client get ticket all  your tickets.", description = "Resource to client get all your tickets.",
+    @Operation(summary = "Cliente listar todos os seus tickets.", description = "Recurso para o cliente listar todos os seus tickets. (Apenas role de cliente pode acessar)",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Return tickets",
+                    @ApiResponse(responseCode = "200", description = "Retorna tickets",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = TicketListResponseDto.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                    @ApiResponse(responseCode = "401", description = "Acesso não autorizado.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                    @ApiResponse(responseCode = "403", description = "Acesso proibido.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
             })
@@ -105,16 +105,16 @@ public class TicketController {
     }
 
 
-    @Operation(summary = "Send ticket", description = "Client send ticket.",
+    @Operation(summary = "Enviar ticket", description = "Cliente envia ticket. (Apenas role de client pode acessar)",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Send ticket",
+                    @ApiResponse(responseCode = "201", description = "Envio de ticket.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = TicketResponseDto.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                    @ApiResponse(responseCode = "401", description = "Acesso não autorizado.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                    @ApiResponse(responseCode = "403", description = "Acesso proibido.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
 
@@ -127,17 +127,17 @@ public class TicketController {
     }
 
 
-    @Operation(summary = "Update ticket by ID", description = "Resource to update ticket by ID.",
+    @Operation(summary = "Atualizar ticket por ID.", description = "Recurso para atualizar ticket pelo ID. (Apenas role de support pode acessar)",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Update ticket"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                    @ApiResponse(responseCode = "200", description = "Atualiza ticket"),
+                    @ApiResponse(responseCode = "401", description = "Acesso não autorizado.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                    @ApiResponse(responseCode = "403", description = "Acesso proibido.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "404", description = "Ticket not found",
+                    @ApiResponse(responseCode = "404", description = "Ticket não encontrado.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class)))
             })

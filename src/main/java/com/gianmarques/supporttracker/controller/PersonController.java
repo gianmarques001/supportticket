@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Tag(name = "Persons", description = "Resources to list all persons or by id and delete a person")
+@Tag(name = "Pessoas", description = "Recursos para listar pessoas e procurar por ID. (Apenas role de admins pode acessar)")
 @RestController
 @RequestMapping("/api/v1/persons")
 public class PersonController {
@@ -34,16 +34,16 @@ public class PersonController {
     }
 
 
-    @Operation(summary = "Get all persons", description = "Resource to get all persons.",
+    @Operation(summary = "Listar pessoas.", description = "Recurso para listar as pessoas.",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Return persons",
+                    @ApiResponse(responseCode = "200", description = "Retorna as pessoas.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = PersonResponseDto.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                    @ApiResponse(responseCode = "401", description = "Acesso não autorizado",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                    @ApiResponse(responseCode = "403", description = "Acesso proibido.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class)))
             })
@@ -55,19 +55,19 @@ public class PersonController {
     }
 
 
-    @Operation(summary = "Get person by ID", description = "Resource to get person by ID.",
+    @Operation(summary = "Buscar pessoa por ID.", description = "Recurso para buscar pessoa pelo ID.",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Return person",
+                    @ApiResponse(responseCode = "200", description = "Retorna pessoa.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = PersonResponseDto.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                    @ApiResponse(responseCode = "401", description = "Acesso não autorizado.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "403", description = "Forbidden access",
+                    @ApiResponse(responseCode = "403", description = "Acesso proibido",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "404", description = "Person not found",
+                    @ApiResponse(responseCode = "404", description = "Pessoa não encontrada.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class)))
             })

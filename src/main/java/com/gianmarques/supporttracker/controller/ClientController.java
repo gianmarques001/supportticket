@@ -20,7 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
-@Tag(name = "Clients", description = "Resources to save and update a client")
+@Tag(name = "Clientes", description = "Recursos para salvar e atualizar clientes.")
 @RestController
 @RequestMapping("/api/v1/clients")
 public class ClientController {
@@ -31,15 +31,15 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    @Operation(summary = "Save client", description = "Resource to save client in the system.",
+    @Operation(summary = "Salvar cliente.", description = "Recurso para salvar cliente.",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Create client",
+                    @ApiResponse(responseCode = "201", description = "Salvar cliente.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ClientResponseDto.class))),
-                    @ApiResponse(responseCode = "409", description = "Conflict data",
+                    @ApiResponse(responseCode = "409", description = "Conflito de dados.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "422", description = "Invalid field error",
+                    @ApiResponse(responseCode = "422", description = "Campos inválidos.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
             })
@@ -50,20 +50,20 @@ public class ClientController {
     }
 
 
-    @Operation(summary = "Update client", description = "Resource to update client in the system.",
+    @Operation(summary = "Atualizar cliente.", description = "Recurso para atualizar um cliente. (Apenas role de admin pode acessar)",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Update client"),
-                    @ApiResponse(responseCode = "400", description = "The field in the new password are not the same.",
+                    @ApiResponse(responseCode = "204", description = "Atualizar cliente."),
+                    @ApiResponse(responseCode = "400", description = "Campo da nova senha está divergente.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "404", description = "Client not found.",
+                    @ApiResponse(responseCode = "404", description = "Cliente não encontrado.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "409", description = "Password is incorrect",
+                    @ApiResponse(responseCode = "409", description = "Conflito de dados.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "422", description = "Invalid field error",
+                    @ApiResponse(responseCode = "422", description = "Campos inválidos.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
             })

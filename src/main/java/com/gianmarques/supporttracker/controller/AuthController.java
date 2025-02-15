@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Authentication", description = "Resource to authenticate")
+@Tag(name = "Autenticação", description = "Recurso para autenticar.")
 @RestController
 @RequestMapping("/api/v1")
 public class AuthController {
@@ -39,15 +39,15 @@ public class AuthController {
     }
 
 
-    @Operation(summary = "Authenticate a user", description = "Resource to authenticate a user in system.",
+    @Operation(summary = "Autenticar um usuário", description = "Recurso para autenticar um usuário no sistema.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successful authentication and return token.",
+                    @ApiResponse(responseCode = "200", description = "Sucesso na autenticação, retorno de um token.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = JwtToken.class))),
-                    @ApiResponse(responseCode = "400", description = "Bad credentials",
+                    @ApiResponse(responseCode = "400", description = "Credenciais inválidas.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "422", description = "Invalid field error",
+                    @ApiResponse(responseCode = "422", description = "Campos inválidos",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
             })
@@ -62,7 +62,7 @@ public class AuthController {
         } catch (AuthenticationException e) {
             log.warn("Error", e.getMessage());
         }
-        return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Bad credentials"));
+        return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Credenciais inválidas."));
 
     }
 

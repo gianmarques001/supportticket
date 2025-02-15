@@ -52,7 +52,7 @@ public class TicketService {
     }
 
     public Ticket getTicketById(Long id) {
-        return ticketRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
+        return ticketRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Ticket não encontrado."));
     }
 
     public void updateTicket(Long idTicket, Long idSupport) {
@@ -74,7 +74,7 @@ public class TicketService {
             ticket.setStatus(Ticket.Status.CLOSED);
 
         } else {
-            throw new TicketAlreadyClosedException("Ticket is closed");
+            throw new TicketAlreadyClosedException("Ticket já está fechado.");
         }
     }
 
@@ -83,7 +83,7 @@ public class TicketService {
         Support support = supportService.getSupportById(id);
         List<TicketAllocation> tickets = ticketAllocationRepository.findAllBySupport(support);
         if (tickets.isEmpty()) {
-            throw new EntityNotFoundException("Tickets are empty");
+            throw new EntityNotFoundException("Sem tickets.");
         }
         return supportRepository.findAllByIdEquals(id);
     }
