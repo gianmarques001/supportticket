@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.gianmarques</groupId>
-    <artifactId>supporttracker</artifactId>
+    <artifactId>supporticket</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>supporttracker</name>
     <description>Demo project for Spring Boot</description>
